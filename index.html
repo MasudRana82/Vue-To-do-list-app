@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>TO do</title>
+  <style>
+    #app {
+      border: dashed black 1px;
+      display: inline-block;
+      padding: 0 20px;
+    }
+
+    #app label {
+      padding: 5px;
+    }
+
+    #app label:hover {
+      cursor: pointer;
+      background-color: lightgray;
+      border-radius: 5px;
+    }
+
+    ul {
+      list-style-type: none;
+    }
+
+    li {
+      border-radius: 5px;
+      padding: 5px;
+      margin: 2px;
+      background-color: rgb(211, 254, 211);
+    }
+
+    .impClass {
+      background-color: rgb(255, 202, 202);
+      font-weight: bold;
+    }
+    #ulFound li {
+      text-decoration: line-through;
+      background-color: rgb(230,230,230);
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>To do app</h1>
+  
+  <div id="app">
+    <form v-on:submit.prevent="addItem">
+      <p>
+       Task <br>
+        <input type="text" required placeholder="item name.." v-model="itemName">
+      </p>
+    
+      <p>
+        Important?
+        <label>
+          <input type="checkbox" v-model="itemImportant">
+          {{ itemImportant }}
+        </label>
+      </p>
+      <button type="submit">Add Task</button>
+    </form>
+    <br>
+    <hr>
+
+    <div>
+      <p><strong>Task list:</strong></p>
+      <ul>
+        <li v-for="item in shoppingList" v-bind:class="{ impClass: item.important }" v-on:click="item.found=!item.found" v-show="!item.found" >{{ item.name }}, {{ item.number}}
+        </li>
+      </ul>
+      <ul id="ulFound" >
+        <li v-for="item in shoppingList" v-bind:class="{ impClass: item.important }" v-on:click="item.found=!item.found" v-show="item.found" >{{ item.name }}, {{ item.number}}
+        </li>
+      </ul>
+    </div>
+  </div>
+
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script>
+    const app = Vue.createApp({
+      data() {
+        return {
+          itemName: null,
+          itemImportant: false,
+          shoppingList: [
+            { name: 'Tomatoes', number: 5, important: false, found:false },
+            { name: 'Bread', number: 1, important: false, found: false },
+            { name: 'Soap', number: 5, important: true, found: true },
+          ]
+        }
+      },
+      methods: {
+        addItem() {
+          let item = {
+            name: this.itemName,
+            important: this.itemImportant,
+            found:false
+          }
+          this.shoppingList.push(item)
+          this.itemName = null
+          this.itemImportant = false
+          
+        }
+      }
+    })
+    app.mount('#app')
+  </script>
+
+</body>
+
+</html>
